@@ -1,0 +1,15 @@
+{
+  "name": "ftr-brev-ly",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm -r build",
+    "dev:server": "pnpm --filter server dev",
+    "dev:web": "pnpm --filter web dev"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}
