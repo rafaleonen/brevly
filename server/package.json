@@ -2,7 +2,7 @@
   "name": "server",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/server.ts",
+    "dev": "node --watch src/main/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "db:generate": "drizzle-kit generate",

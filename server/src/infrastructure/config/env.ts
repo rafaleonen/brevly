@@ -1,42 +1,22 @@
-import { fastifyCors } from "@fastify/cors";
-import { fastifySwagger } from "@fastify/swagger";
-import scalarUI from "@scalar/fastify-api-reference";
-import { fastify } from "fastify";
-import {
-  jsonSchemaTransform,
-  serializerCompiler,
-  validatorCompiler,
-} from "fastify-type-provider-zod";
+import { z } from "zod";
 
-const app = fastify();
-
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
-
-app.register(fastifyCors, {
-  origin: "*",
+const envSchema = z.object({
+  PORT: z.coerce.number().default(3333),
+  NODE_ENV: z.enum(["development", "test", "production"]).default("production"),
+  DATABASE_URL: z.url().startsWith("postgresql://"),
+  CLOUDFLARE_ACCOUNT_ID: z.string(),
+  CLOUDFLARE_ACCESS_KEY_ID: z.string(),
+  CLOUDFLARE_SECRET_ACCESS_KEY: z.string(),
+  CLOUDFLARE_R2_BUCKET: z.string(),
+  CLOUDFLARE_R2_PUBLIC_URL: z.url(),
 });
 
-app.register(fastifySwagger, {
-  openapi: {
-    info: {
-      title: "Example API Docs",
-      version: "1.0.0",
-    },
-  },
+const parsed = envSchema.safeParse(process.env);
 
-  transform: jsonSchemaTransform,
-});
+if (!parsed.success) {
+  console.error("Invalid environment variables:", z.treeifyError(parsed.error));
+  process.exit(1);
+}
 
-app.get("/openai.json", () => app.swagger());
-
-app.register(scalarUI, {
-  routePrefix: "/docs",
-  configuration: {
-    theme: "deepSpace",
-  },
-});
-
-app
-  .listen({ port: 3333 })
-  .then(() => console.log("Server is running at 3333!"));
+export const env = parsed.data;
+export type Env = typeof env;
