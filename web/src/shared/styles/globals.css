@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Open Sans", sans-serif;
+  --color-blue-dark: #2c4091;
+  --color-blue-base: #2c46b1;
+  --color-danger: #b12c4d;
+}
