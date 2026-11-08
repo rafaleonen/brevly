@@ -1,7 +1,7 @@
 import type { ListShortLinksUseCase } from "@/application/use-cases/list-short-links.use-case";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-export class ListShortLinkByCodeController {
+export class ListShortLinksController {
   constructor(private readonly listShortLinks: ListShortLinksUseCase) {}
 
   async handle(request: FastifyRequest, reply: FastifyReply) {

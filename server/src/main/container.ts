@@ -1,16 +1,16 @@
 import { CreateShortLinkUseCase } from "@/application/use-cases/create-short-link.use-case";
 import { DeleteShortLinkByIdUseCase } from "@/application/use-cases/delete-short-link-by-id.use-case";
-import { GetShortLinkByCodeUseCase } from "@/application/use-cases/get-short-link-by-code.use-case";
-import { IncrementShortLinkClickByCodeUseCase } from "@/application/use-cases/increment-short-link-click-by-code.use-case";
+import { GetShortLinkBySlugUseCase } from "@/application/use-cases/get-short-link-by-slug.use-case";
+import { IncrementShortLinkClickBySlugUseCase } from "@/application/use-cases/increment-short-link-click-by-slug.use-case";
 import { ListShortLinksUseCase } from "@/application/use-cases/list-short-links.use-case";
 import { UuidIdGenerator } from "@/infrastructure/crypto/uuid-id-generator";
 import type { Database } from "@/infrastructure/db/client";
 import { DrizzleShortLinkRepository } from "@/infrastructure/db/repositories/drizzle-short-link.repository";
 import { CreateShortLinkController } from "@/presentation/http/controllers/create-short-link.controller";
 import { DeleteShortLinkByIdController } from "@/presentation/http/controllers/delete-short-link-by-id.controller";
-import { GetShortLinkByCodeController } from "@/presentation/http/controllers/get-short-link-by-code.controller";
-import { IncrementShortLinkClickByCodeController } from "@/presentation/http/controllers/increment-short-link-by-code.controller";
-import { ListShortLinkByCodeController } from "@/presentation/http/controllers/list-short-links.controller";
+import { GetShortLinkBySlugController } from "@/presentation/http/controllers/get-short-link-by-slug.controller";
+import { IncrementShortLinkClickBySlugController } from "@/presentation/http/controllers/increment-short-link-by-slug.controller";
+import { ListShortLinksController } from "@/presentation/http/controllers/list-short-links.controller";
 
 interface ContainerDeps {
   db: Database;
@@ -31,9 +31,9 @@ export function makeContainer({ db }: ContainerDeps) {
   const deleteShortLinkById = new DeleteShortLinkByIdUseCase(
     shortLinkRepository
   );
-  const getShortLinkByCode = new GetShortLinkByCodeUseCase(shortLinkRepository);
-  const incrementShortLinkClickByCode =
-    new IncrementShortLinkClickByCodeUseCase(shortLinkRepository);
+  const getShortLinkBySlug = new GetShortLinkBySlugUseCase(shortLinkRepository);
+  const incrementShortLinkClickBySlug =
+    new IncrementShortLinkClickBySlugUseCase(shortLinkRepository);
   const listShortLinks = new ListShortLinksUseCase(shortLinkRepository);
 
   return {
@@ -42,12 +42,12 @@ export function makeContainer({ db }: ContainerDeps) {
       deleteShortLinkById: new DeleteShortLinkByIdController(
         deleteShortLinkById
       ),
-      getShortLinkByCode: new GetShortLinkByCodeController(getShortLinkByCode),
-      incrementShortLinkClickByCode:
-        new IncrementShortLinkClickByCodeController(
-          incrementShortLinkClickByCode
+      getShortLinkBySlug: new GetShortLinkBySlugController(getShortLinkBySlug),
+      incrementShortLinkClickBySlug:
+        new IncrementShortLinkClickBySlugController(
+          incrementShortLinkClickBySlug
         ),
-      listShortLinks: new ListShortLinkByCodeController(listShortLinks),
+      listShortLinks: new ListShortLinksController(listShortLinks),
     },
   };
 }

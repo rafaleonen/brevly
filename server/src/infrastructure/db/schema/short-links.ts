@@ -12,11 +12,11 @@ export const shortLinks = pgTable(
   "short_links",
   {
     id: uuid("id").primaryKey(),
-    code: varchar("code", { length: 16 }).notNull(),
+    slug: varchar("slug", { length: 48 }).notNull(),
     originalUrl: text("original_url").notNull(),
     clicks: integer("clicks").notNull().default(0),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     deletedAt: timestamp("deleted_at"),
   },
-  (table) => [uniqueIndex("short_links_code_uq").on(table.code)]
+  (table) => [uniqueIndex("short_links_slug_uq").on(table.slug)]
 );

@@ -1,4 +1,4 @@
-import type { IncrementShortLinkClickByCodeUseCase } from "@/application/use-cases/increment-short-link-click-by-code.use-case";
+import type { IncrementShortLinkClickBySlugUseCase } from "@/application/use-cases/increment-short-link-click-by-slug.use-case";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import {
   presentDomainError,
@@ -6,9 +6,9 @@ import {
 } from "../presenters/error.presenter";
 import { incrementShortLinkClickSchema } from "../schemas/short-links.schemas";
 
-export class IncrementShortLinkClickByCodeController {
+export class IncrementShortLinkClickBySlugController {
   constructor(
-    private readonly incrementShortLinkClickByCode: IncrementShortLinkClickByCodeUseCase
+    private readonly incrementShortLinkClickBySlug: IncrementShortLinkClickBySlugUseCase
   ) {}
 
   async handle(request: FastifyRequest, reply: FastifyReply) {
@@ -18,10 +18,10 @@ export class IncrementShortLinkClickByCodeController {
       return presentZodValidationError(body.error, reply);
     }
 
-    const { code } = body.data;
+    const { slug } = body.data;
 
-    const result = await this.incrementShortLinkClickByCode.execute({
-      code,
+    const result = await this.incrementShortLinkClickBySlug.execute({
+      slug,
     });
 
     if (result.left) {

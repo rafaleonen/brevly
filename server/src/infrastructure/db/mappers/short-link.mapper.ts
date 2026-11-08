@@ -2,14 +2,14 @@ import {
   ShortLink,
   type ShortLinkProps,
 } from "@/domain/entities/short-link.entity";
+import { ShortLinkSlug } from "@/domain/value-objects/short-link-slug.vo";
 import { ShortLinkUrl } from "@/domain/value-objects/short-link-url.vo";
-import { ShortLinkCode } from "@/domain/value-objects/shot-link-code.vo";
 import type { NewShortLinkRow, ShortLinkRow } from "../schema/types";
 
-export class CustomerMapper {
+export class ShortLinkMapper {
   static toDomain(row: ShortLinkRow): ShortLink {
     const props: ShortLinkProps = {
-      code: ShortLinkCode.restore(row.code),
+      slug: ShortLinkSlug.restore(row.slug),
       originalUrl: ShortLinkUrl.restore(row.originalUrl),
       clicks: row.clicks,
       createdAt: row.createdAt,
@@ -21,7 +21,7 @@ export class CustomerMapper {
   static toPersistence(shortLink: ShortLink): NewShortLinkRow {
     return {
       id: shortLink.id,
-      code: shortLink.code.value,
+      slug: shortLink.slug.value,
       originalUrl: shortLink.originalUrl.value,
       clicks: shortLink.clicks ?? 0,
       createdAt: shortLink.createdAt,

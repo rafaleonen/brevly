@@ -1,18 +1,18 @@
 import { makeLeft, makeRight, type Either } from "@/core/either";
 import { NotFoundError } from "@/domain/errors/short-link.error";
 import type { ShortLinkRepository } from "@/domain/repositories/short-link.repository";
-import type { IncrementShortLinkClickByCodeInputDTO } from "../dtos/short-link.dtos";
+import type { IncrementShortLinkClickBySlugInputDTO } from "../dtos/short-link.dtos";
 
-export class IncrementShortLinkClickByCodeUseCase {
+export class IncrementShortLinkClickBySlugUseCase {
   constructor(private readonly shortLinks: ShortLinkRepository) {}
 
   async execute(
-    input: IncrementShortLinkClickByCodeInputDTO
+    input: IncrementShortLinkClickBySlugInputDTO
   ): Promise<Either<NotFoundError, void>> {
-    const shortLink = await this.shortLinks.findByCode(input.code);
+    const shortLink = await this.shortLinks.findBySlug(input.slug);
 
     if (!shortLink) {
-      return makeLeft(new NotFoundError("Code"));
+      return makeLeft(new NotFoundError("Slug"));
     }
 
     shortLink.incrementClick();

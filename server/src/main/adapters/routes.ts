@@ -6,9 +6,9 @@ export function buildRoutes(app: FastifyInstance, container: Container) {
   app.register(shortLinkRoutes, {
     createShortLink: container.controllers.createShortLink,
     deleteShortLinkById: container.controllers.deleteShortLinkById,
-    getShortLinkByCode: container.controllers.getShortLinkByCode,
-    incrementShortLinkByCode:
-      container.controllers.incrementShortLinkClickByCode,
+    getShortLinkBySlug: container.controllers.getShortLinkBySlug,
+    incrementShortLinkBySlug:
+      container.controllers.incrementShortLinkClickBySlug,
     listShortLinks: container.controllers.listShortLinks,
   });
 }

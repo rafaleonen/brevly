@@ -12,7 +12,7 @@ export class DeleteShortLinkByIdUseCase {
     const shortLink = await this.shortLinks.findById(input.id);
 
     if (!shortLink) {
-      return makeLeft(new NotFoundError("Code"));
+      return makeLeft(new NotFoundError("ShortLinkId"));
     }
 
     shortLink.softDelete();

@@ -8,18 +8,19 @@ export class InvalidUrlError extends DomainError {
   }
 }
 
-export class CodeAlreadyExistsError extends DomainError {
-  readonly code = "CODE_ALREADY_EXISTS";
+export class SlugAlreadyExistsError extends DomainError {
+  readonly code = "SLUG_ALREADY_EXISTS";
 
-  constructor(code: string) {
-    super(`Code "${code}" already exists`);
+  constructor(slug: string) {
+    super(`Slug "${slug}" already exists`);
   }
 }
 
-export class CodeGenerationError extends DomainError {
-  readonly code = "CODE_GENERATION_ERROR";
-  constructor() {
-    super("Could not generate a unique short link code");
+export class InvalidSlugError extends DomainError {
+  readonly code = "INVALID_SLUG";
+
+  constructor(slug: string) {
+    super(`Slug "${slug}" is invalid`);
   }
 }
 

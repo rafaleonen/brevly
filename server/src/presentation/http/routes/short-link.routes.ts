@@ -1,16 +1,16 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { CreateShortLinkController } from "../controllers/create-short-link.controller";
 import type { DeleteShortLinkByIdController } from "../controllers/delete-short-link-by-id.controller";
-import type { GetShortLinkByCodeController } from "../controllers/get-short-link-by-code.controller";
-import type { IncrementShortLinkClickByCodeController } from "../controllers/increment-short-link-by-code.controller";
-import type { ListShortLinkByCodeController } from "../controllers/list-short-links.controller";
+import type { GetShortLinkBySlugController } from "../controllers/get-short-link-by-slug.controller";
+import type { IncrementShortLinkClickBySlugController } from "../controllers/increment-short-link-by-slug.controller";
+import type { ListShortLinksController } from "../controllers/list-short-links.controller";
 
 type Options = {
   createShortLink: CreateShortLinkController;
   deleteShortLinkById: DeleteShortLinkByIdController;
-  getShortLinkByCode: GetShortLinkByCodeController;
-  incrementShortLinkByCode: IncrementShortLinkClickByCodeController;
-  listShortLinks: ListShortLinkByCodeController;
+  getShortLinkBySlug: GetShortLinkBySlugController;
+  incrementShortLinkBySlug: IncrementShortLinkClickBySlugController;
+  listShortLinks: ListShortLinksController;
 };
 
 export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
@@ -21,12 +21,12 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
 
   app.delete("/short-links/:id", {}, controllers.deleteShortLinkById.handle);
 
-  app.get("/short-links/code/:code", {}, controllers.getShortLinkByCode.handle);
+  app.get("/short-links/slug/:slug", {}, controllers.getShortLinkBySlug.handle);
 
   app.patch(
-    "/short-links/code/:code/increment",
+    "/short-links/slug/:slug/increment",
     {},
-    controllers.incrementShortLinkByCode.handle
+    controllers.incrementShortLinkBySlug.handle
   );
 
   app.get("/short-links", {}, controllers.listShortLinks.handle);

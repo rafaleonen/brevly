@@ -1,9 +1,10 @@
 export interface CreateShortLinkInputDTO {
+  slug: string;
   url: string;
 }
 
 export interface CreateShortLinkOutputDTO {
-  code: string;
+  slug: string;
   originalUrl: string;
   protocol: string;
 }
@@ -12,10 +13,10 @@ export interface DeleteShortLinkByIdInputDTO {
   id: string;
 }
 
-export interface GetShortLinkByCodeInputDTO {
-  code: string;
+export interface GetShortLinkBySlugInputDTO {
+  slug: string;
 }
 
-export interface IncrementShortLinkClickByCodeInputDTO {
-  code: string;
+export interface IncrementShortLinkClickBySlugInputDTO {
+  slug: string;
 }

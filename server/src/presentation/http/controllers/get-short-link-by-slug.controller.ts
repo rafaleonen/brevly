@@ -1,4 +1,4 @@
-import type { GetShortLinkByCodeUseCase } from "@/application/use-cases/get-short-link-by-code.use-case";
+import type { GetShortLinkBySlugUseCase } from "@/application/use-cases/get-short-link-by-slug.use-case";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import {
   presentDomainError,
@@ -6,8 +6,8 @@ import {
 } from "../presenters/error.presenter";
 import { getShortLinkSchema } from "../schemas/short-links.schemas";
 
-export class GetShortLinkByCodeController {
-  constructor(private readonly getShortLinkByCode: GetShortLinkByCodeUseCase) {}
+export class GetShortLinkBySlugController {
+  constructor(private readonly getShortLinkBySlug: GetShortLinkBySlugUseCase) {}
 
   async handle(request: FastifyRequest, reply: FastifyReply) {
     const body = getShortLinkSchema.safeParse(request.params);
@@ -16,10 +16,10 @@ export class GetShortLinkByCodeController {
       return presentZodValidationError(body.error, reply);
     }
 
-    const { code } = body.data;
+    const { slug } = body.data;
 
-    const result = await this.getShortLinkByCode.execute({
-      code,
+    const result = await this.getShortLinkBySlug.execute({
+      slug,
     });
 
     if (result.left) {

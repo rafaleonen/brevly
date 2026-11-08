@@ -1,5 +1,5 @@
 import type { ShortLink } from "@/domain/entities/short-link.entity";
-import { CodeAlreadyExistsError } from "@/domain/errors/short-link.error";
+import { SlugAlreadyExistsError } from "@/domain/errors/short-link.error";
 import type { ShortLinkRepository } from "@/domain/repositories/short-link.repository";
 import { eq, isNull } from "drizzle-orm";
 import type { Database } from "../client";
@@ -17,8 +17,8 @@ export class DrizzleShortLinkRepository implements ShortLinkRepository {
         .values(ShortLinkMapper.toPersistence(shortLink));
     } catch (err) {
       const contraint = uniqueViolation(err);
-      if (contraint === "short_links_code_uq") {
-        throw new CodeAlreadyExistsError(shortLink.code.value);
+      if (contraint === "short_links_slug_uq") {
+        throw new SlugAlreadyExistsError(shortLink.slug.value);
       }
 
       throw err;
@@ -50,11 +50,11 @@ export class DrizzleShortLinkRepository implements ShortLinkRepository {
     return row ? ShortLinkMapper.toDomain(row) : null;
   }
 
-  async findByCode(code: string): Promise<ShortLink | null> {
+  async findBySlug(slug: string): Promise<ShortLink | null> {
     const [row] = await this.db
       .select()
       .from(shortLinks)
-      .where(eq(shortLinks.code, code))
+      .where(eq(shortLinks.slug, slug))
       .limit(1);
 
     return row ? ShortLinkMapper.toDomain(row) : null;

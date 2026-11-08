@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const createShortLinkSchema = z.object({
+  slug: z.string().max(48),
   url: z.url(),
 });
 
@@ -9,9 +10,9 @@ export const deleteShortLinkSchema = z.object({
 });
 
 export const getShortLinkSchema = z.object({
-  code: z.string().min(5).max(12),
+  slug: z.string().max(48),
 });
 
 export const incrementShortLinkClickSchema = z.object({
-  code: z.string().min(5).max(12),
+  slug: z.string().max(48),
 });

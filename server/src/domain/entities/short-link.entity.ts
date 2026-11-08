@@ -1,9 +1,9 @@
 import { Entity } from "@/core/entity";
+import type { ShortLinkSlug } from "../value-objects/short-link-slug.vo";
 import type { ShortLinkUrl } from "../value-objects/short-link-url.vo";
-import type { ShortLinkCode } from "../value-objects/shot-link-code.vo";
 
 export interface ShortLinkProps {
-  code: ShortLinkCode;
+  slug: ShortLinkSlug;
   originalUrl: ShortLinkUrl;
   clicks: number;
   createdAt: Date;
@@ -11,7 +11,7 @@ export interface ShortLinkProps {
 }
 
 export interface CreateShortLinkProps {
-  code: ShortLinkCode;
+  slug: ShortLinkSlug;
   originalUrl: ShortLinkUrl;
   clicks?: number;
   createdAt?: Date;
@@ -26,7 +26,7 @@ export class ShortLink extends Entity<ShortLinkProps> {
   static create(props: CreateShortLinkProps, id: string): ShortLink {
     return new ShortLink(
       {
-        code: props.code,
+        slug: props.slug,
         originalUrl: props.originalUrl,
         clicks: props.clicks ?? 0,
         createdAt: props.createdAt ?? new Date(),
@@ -40,8 +40,8 @@ export class ShortLink extends Entity<ShortLinkProps> {
     return new ShortLink(props, id);
   }
 
-  get code(): ShortLinkCode {
-    return this.props.code;
+  get slug(): ShortLinkSlug {
+    return this.props.slug;
   }
 
   get originalUrl(): ShortLinkUrl {
