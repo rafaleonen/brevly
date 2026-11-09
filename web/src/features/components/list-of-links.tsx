@@ -16,7 +16,13 @@ export function ListOfLinks({ links }: ListOfLinksProps) {
         <div key={link.id} className="flex flex-col gap-4 ">
           <div className="grid grid-cols-12 py-1">
             <div className="flex flex-col col-span-7 gap-2">
-              <Link to={`/redirect?slug=${link.slug}`}>
+              <Link
+                to={{
+                  pathname: "/redirect",
+                  search: `?slug=${encodeURIComponent(link.slug)}`,
+                }}
+                target="_blank"
+              >
                 <Typography variant="md" className="text-blue-base">
                   {PREFIX}
                   {link.slug}
