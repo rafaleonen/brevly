@@ -2,6 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { isValidUrl } from "@/shared/utils/validate-url";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { PREFIX } from "../constants/prefix";
 
 interface FormValues {
   originalUrl: string;
@@ -48,7 +49,7 @@ export function NewLinkForm() {
       <Input
         id="shortnedUrl"
         label="Link Encurtado"
-        prefix="brev.ly/"
+        prefix={PREFIX}
         isFilled={!!watch("shortenedUrl")}
         error={errors.shortenedUrl?.message}
         {...shortenedUrlField}
