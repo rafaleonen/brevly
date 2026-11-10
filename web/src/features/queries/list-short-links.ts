@@ -1,8 +1,7 @@
 import { apiClient } from "@/shared/api/apiClient";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-
-export type ShortLinkSort = "id_desc" | "id_asc" | "clicks_desc" | "clicks_asc";
+import type { ShortLinkSortValue } from "../constants/sort";
 
 export type ShortLink = {
   id: string;
@@ -18,7 +17,7 @@ type Paginated<T> = {
 
 type FetchParams = {
   cursor?: string;
-  sort: ShortLinkSort;
+  sort: ShortLinkSortValue;
   limit?: number;
 };
 
@@ -38,7 +37,7 @@ export async function listShortLinks(
 
 export const LIST_SHORT_LINKS_QUERY_KEY = "list-short-links" as const;
 
-export function useInfiniteListShortLinks(sort: ShortLinkSort) {
+export function useInfiniteListShortLinks(sort: ShortLinkSortValue) {
   const { data, ...query } = useInfiniteQuery({
     queryKey: [LIST_SHORT_LINKS_QUERY_KEY, { sort }],
     queryFn: ({ pageParam, signal }) =>

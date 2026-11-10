@@ -1,17 +1,32 @@
-import { links } from "@/data/links";
+import { useIncrementShortLinkClickMutation } from "@/features/mutations/increment-short-link-click-by-slug";
 import logoIcon from "@/shared/assets/svg/logo_icon.svg";
 import { Typography } from "@/shared/ui/typography";
-import { useSearchParams } from "react-router";
+import { useEffect, useRef } from "react";
+import { Navigate, useSearchParams } from "react-router";
 
 export function RedirectPage() {
   const [searchParams] = useSearchParams();
   const slug = searchParams.get("slug");
 
-  console.log("slug");
+  const hasStarted = useRef(false);
+  const {
+    mutateAsync: incrementShortLinkClick,
+    data,
+    isError,
+  } = useIncrementShortLinkClickMutation();
 
-  const foundLink = links.find((link) => link.slug === slug);
+  useEffect(() => {
+    if (!slug || hasStarted.current) return;
+    hasStarted.current = true;
 
-  console.log(foundLink);
+    incrementShortLinkClick(slug).then((shortLink) => {
+      window.location.replace(shortLink.originalUrl);
+    });
+  }, [slug, incrementShortLinkClick]);
+
+  if (!slug || isError) {
+    return <Navigate to="/not-found" replace />;
+  }
 
   return (
     <div className="flex items-center justify-between h-full w-full px-4">
@@ -26,10 +41,7 @@ export function RedirectPage() {
           </Typography>
           <Typography variant="md">
             Não foi redirecionado?{" "}
-            <a
-              href={foundLink.originalUrl}
-              className="text-blue-base underline"
-            >
+            <a href={data.originalUrl} className="text-blue-base underline">
               Acesse aqui
             </a>
           </Typography>

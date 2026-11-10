@@ -1,10 +1,11 @@
 import { apiClient } from "@/shared/api/apiClient";
+import type { ShortLink } from "@/shared/models/short-link";
 import { useQuery } from "@tanstack/react-query";
 
 async function getShortLinkBySlug(
   slug: string,
   signal?: AbortSignal
-): Promise<{ originalUrl: string }> {
+): Promise<ShortLink> {
   const response = await apiClient.get(
     `/short-links/slug/${encodeURIComponent(slug)}`,
     {
@@ -27,7 +28,7 @@ export function useGetShortLinkBySlugQuery(slug?: string) {
     queryKey: [GET_SHORT_LINK_BY_SLUG_QUERY_KEY, slug],
     queryFn: ({ signal }) => getShortLinkBySlug(slug, signal),
     enabled: !!slug,
-    staleTime: 2 * 60_000,
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
   });
 }

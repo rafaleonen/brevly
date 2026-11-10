@@ -1,4 +1,5 @@
 import { apiClient } from "@/shared/api/apiClient";
+import type { ShortLink } from "@/shared/models/short-link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GET_SHORT_LINK_BY_SLUG_QUERY_KEY } from "../queries/get-short-link-by-slug";
 import { LIST_SHORT_LINKS_QUERY_KEY } from "../queries/list-short-links";
@@ -6,7 +7,7 @@ import { LIST_SHORT_LINKS_QUERY_KEY } from "../queries/list-short-links";
 async function incrementShortLinkClickBySlug(
   slug: string,
   signal?: AbortSignal
-): Promise<{ originalUrl: string }> {
+): Promise<ShortLink> {
   const response = await apiClient.patch(
     `/short-links/slug/${slug}/increment`,
     {
@@ -15,7 +16,7 @@ async function incrementShortLinkClickBySlug(
   );
 
   if (!response.data) {
-    throw new Error("Short link not found");
+    throw new Error("Short Link not found!");
   }
 
   return response.data;

@@ -1,3 +1,4 @@
+import type { ShortLink } from "@/shared/models/short-link";
 import { Button } from "@/shared/ui/button";
 import { Divider } from "@/shared/ui/divider";
 import { Typography } from "@/shared/ui/typography";
@@ -6,10 +7,12 @@ import { Link } from "react-router";
 import { PREFIX } from "../constants/prefix";
 
 type ListOfLinksProps = {
-  links: any[];
+  links: ShortLink[];
+  onDelete(slug: string): void;
+  onCopy(slug: string): void;
 };
 
-export function ListOfLinks({ links }: ListOfLinksProps) {
+export function ListOfLinks({ links, onCopy, onDelete }: ListOfLinksProps) {
   return (
     <div className="w-full flex flex-col gap-4">
       {links.map((link) => (
@@ -41,10 +44,10 @@ export function ListOfLinks({ links }: ListOfLinksProps) {
             </div>
 
             <div className="col-span-2 flex items-center justify-center gap-2 shrink-0">
-              <Button variant="secondary">
+              <Button variant="secondary" onClick={() => onCopy(link.slug)}>
                 <Copy size={16} />
               </Button>
-              <Button variant="secondary">
+              <Button variant="secondary" onClick={() => onDelete(link.slug)}>
                 <Trash size={16} />
               </Button>
             </div>

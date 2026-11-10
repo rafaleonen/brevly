@@ -1,39 +1,65 @@
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { isValidUrl } from "@/shared/utils/validate-url";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import z from "zod";
 import { PREFIX } from "../constants/prefix";
+import type { CreateShortLink } from "../mutations/create-short-link";
 
 interface FormValues {
   originalUrl: string;
   shortenedUrl: string;
 }
 
-export function NewLinkForm() {
+interface NewLinkFormProps {
+  onSubmit: (values: CreateShortLink) => void;
+}
+
+const newLinkSchema = z.object({
+  originalUrl: z
+    .string()
+    .trim()
+    .min(1, "Link Original é obrigatório!")
+    .refine(isValidUrl, "Informe uma URL válida."),
+  shortenedUrl: z
+    .string()
+    .trim()
+    .min(1, "Link Encurtado é obrigatório!")
+    .regex(
+      /^[a-zA-Z0-9_-]+$/,
+      "Use apenas letras, números, hífen e underline."
+    ),
+});
+
+export function NewLinkForm({ onSubmit }: NewLinkFormProps) {
   const {
     register,
     watch,
-    handleSubmit,
+    handleSubmit: hookFormHandleSubmit,
     formState: { errors },
   } = useForm({
+    resolver: zodResolver(newLinkSchema),
     defaultValues: {
       originalUrl: "",
       shortenedUrl: "",
     },
   });
 
-  const shortenedUrlField = register("shortenedUrl", {
-    required: "Link Encurtado é obrigatório!",
-    pattern: {
-      value: /^[a-zA-Z0-9_-]+$/,
-      message: "Use apenas letras, números, hífen e underline.",
-    },
-  });
+  const shortenedUrlField = register("shortenedUrl");
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  const handleSubmit: SubmitHandler<FormValues> = (data) => {
+    onSubmit({
+      originalUrl: data.originalUrl,
+      slug: data.shortenedUrl,
+    });
+  };
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={hookFormHandleSubmit(handleSubmit)}
+    >
       <Input
         id="originalUrl"
         label="Link Original"

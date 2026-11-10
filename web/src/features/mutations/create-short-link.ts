@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GET_SHORT_LINK_BY_SLUG_QUERY_KEY } from "../queries/get-short-link-by-slug";
 import { LIST_SHORT_LINKS_QUERY_KEY } from "../queries/list-short-links";
 
-interface CreateShortLink {
+export interface CreateShortLink {
   slug: string;
   originalUrl: string;
 }

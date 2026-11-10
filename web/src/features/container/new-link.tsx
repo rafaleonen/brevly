@@ -2,6 +2,7 @@ import { Typography } from "@/shared/ui/typography";
 import type { ComponentProps } from "react";
 import { twMerge } from "tailwind-variants";
 import { NewLinkForm } from "../components/new-link-form";
+import { useCreateShortLinkMutation } from "../mutations/create-short-link";
 
 type NewLinkContainerProps = ComponentProps<"div">;
 
@@ -9,6 +10,8 @@ export function NewLinkContainer({
   className,
   ...props
 }: NewLinkContainerProps) {
+  const { mutateAsync: createShortLink } = useCreateShortLinkMutation();
+
   return (
     <div
       className={twMerge(
@@ -19,7 +22,7 @@ export function NewLinkContainer({
     >
       <Typography>Novo link</Typography>
 
-      <NewLinkForm />
+      <NewLinkForm onSubmit={createShortLink} />
     </div>
   );
 }
