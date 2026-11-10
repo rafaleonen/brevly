@@ -3,7 +3,7 @@ import { DomainError } from "@/core/error";
 export class InvalidUrlError extends DomainError {
   readonly code = "INVALID_URL";
 
-  constructor(readonly url: string) {
+  constructor(url: string) {
     super(`The URL "${url}" is invalid. Only http and https URLs are allowed.`);
   }
 }
@@ -29,5 +29,13 @@ export class NotFoundError extends DomainError {
 
   constructor(resource: string) {
     super(`${resource} not found.`);
+  }
+}
+
+export class InvalidCursor extends DomainError {
+  readonly code = "INVALID_CURSOR";
+
+  constructor(cursor: string) {
+    super(`Cursor ${cursor} is invalid.`);
   }
 }

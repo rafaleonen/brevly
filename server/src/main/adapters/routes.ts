@@ -5,7 +5,7 @@ import type { Container } from "../container";
 export function buildRoutes(app: FastifyInstance, container: Container) {
   app.register(shortLinkRoutes, {
     createShortLink: container.controllers.createShortLink,
-    deleteShortLinkById: container.controllers.deleteShortLinkById,
+    deleteShortLinkBySlug: container.controllers.deleteShortLinkBySlug,
     getShortLinkBySlug: container.controllers.getShortLinkBySlug,
     incrementShortLinkBySlug:
       container.controllers.incrementShortLinkClickBySlug,

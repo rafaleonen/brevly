@@ -4,9 +4,10 @@ import type { ZodError } from "zod";
 
 const STATUS_BY_CODE: Record<string, number> = {
   INVALID_URL: 400,
+  INVALID_SLUG: 400,
+  INVALID_CURSOR: 400,
   NOT_FOUND: 404,
-  CODE_ALREADY_EXISTS: 409,
-  CODE_GENERATION_ERROR: 500,
+  SLUG_ALREADY_EXISTS: 409,
 };
 
 export function presentDomainError(error: DomainError, reply: FastifyReply) {

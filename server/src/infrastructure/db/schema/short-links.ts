@@ -1,4 +1,6 @@
+import { sql } from "drizzle-orm";
 import {
+  index,
   integer,
   pgTable,
   text,
@@ -18,5 +20,10 @@ export const shortLinks = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     deletedAt: timestamp("deleted_at"),
   },
-  (table) => [uniqueIndex("short_links_slug_uq").on(table.slug)]
+  (table) => [
+    uniqueIndex("short_links_slug_uq").on(table.slug),
+    index("short_links_clicks_id_idx")
+      .on(table.clicks, table.id)
+      .where(sql`${table.deletedAt} IS NULL`),
+  ]
 );

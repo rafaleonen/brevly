@@ -4,13 +4,13 @@ import {
   presentDomainError,
   presentZodValidationError,
 } from "../presenters/error.presenter";
-import { createShortLinkSchema } from "../schemas/short-links.schemas";
+import { createShortLinkBodySchema } from "../schemas/short-links.schemas";
 
 export class CreateShortLinkController {
   constructor(private readonly createShortLink: CreateShortLinkUseCase) {}
 
   async handle(request: FastifyRequest, reply: FastifyReply) {
-    const body = createShortLinkSchema.safeParse(request.body);
+    const body = createShortLinkBodySchema.safeParse(request.body);
 
     if (!body.success) {
       return presentZodValidationError(body.error, reply);

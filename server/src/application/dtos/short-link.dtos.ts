@@ -1,3 +1,5 @@
+import type { ShortLinkSort } from "@/domain/repositories/short-link.repository";
+
 export interface CreateShortLinkInputDTO {
   slug: string;
   url: string;
@@ -9,8 +11,8 @@ export interface CreateShortLinkOutputDTO {
   protocol: string;
 }
 
-export interface DeleteShortLinkByIdInputDTO {
-  id: string;
+export interface DeleteShortLinkBySlugInputDTO {
+  slug: string;
 }
 
 export interface GetShortLinkBySlugInputDTO {
@@ -19,4 +21,10 @@ export interface GetShortLinkBySlugInputDTO {
 
 export interface IncrementShortLinkClickBySlugInputDTO {
   slug: string;
+}
+
+export interface ListShortLinksInputDTO {
+  limit?: number;
+  cursor?: string | null | undefined;
+  sort?: ShortLinkSort;
 }

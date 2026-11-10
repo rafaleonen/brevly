@@ -4,7 +4,7 @@ import {
   presentDomainError,
   presentZodValidationError,
 } from "../presenters/error.presenter";
-import { incrementShortLinkClickSchema } from "../schemas/short-links.schemas";
+import { incrementShortLinkClickParamsSchema } from "../schemas/short-links.schemas";
 
 export class IncrementShortLinkClickBySlugController {
   constructor(
@@ -12,13 +12,15 @@ export class IncrementShortLinkClickBySlugController {
   ) {}
 
   async handle(request: FastifyRequest, reply: FastifyReply) {
-    const body = incrementShortLinkClickSchema.safeParse(request.params);
+    const params = incrementShortLinkClickParamsSchema.safeParse(
+      request.params
+    );
 
-    if (!body.success) {
-      return presentZodValidationError(body.error, reply);
+    if (!params.success) {
+      return presentZodValidationError(params.error, reply);
     }
 
-    const { slug } = body.data;
+    const { slug } = params.data;
 
     const result = await this.incrementShortLinkClickBySlug.execute({
       slug,

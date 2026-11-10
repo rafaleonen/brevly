@@ -4,19 +4,19 @@ import {
   presentDomainError,
   presentZodValidationError,
 } from "../presenters/error.presenter";
-import { getShortLinkSchema } from "../schemas/short-links.schemas";
+import { getShortLinkParamsSchema } from "../schemas/short-links.schemas";
 
 export class GetShortLinkBySlugController {
   constructor(private readonly getShortLinkBySlug: GetShortLinkBySlugUseCase) {}
 
   async handle(request: FastifyRequest, reply: FastifyReply) {
-    const body = getShortLinkSchema.safeParse(request.params);
+    const params = getShortLinkParamsSchema.safeParse(request.params);
 
-    if (!body.success) {
-      return presentZodValidationError(body.error, reply);
+    if (!params.success) {
+      return presentZodValidationError(params.error, reply);
     }
 
-    const { slug } = body.data;
+    const { slug } = params.data;
 
     const result = await this.getShortLinkBySlug.execute({
       slug,
