@@ -1,9 +1,16 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import z from "zod";
 import { CreateShortLinkController } from "../controllers/create-short-link.controller";
 import type { DeleteShortLinkBySlugController } from "../controllers/delete-short-link-by-slug.controller";
 import type { GetShortLinkBySlugController } from "../controllers/get-short-link-by-slug.controller";
 import type { IncrementShortLinkClickBySlugController } from "../controllers/increment-short-link-by-slug.controller";
 import type { ListShortLinksController } from "../controllers/list-short-links.controller";
+import {
+  createShortLinkBodySchema,
+  deleteShortLinkParamsSchema,
+  getShortLinkParamsSchema,
+  incrementShortLinkClickParamsSchema,
+} from "../schemas/short-links.schemas";
 
 type Options = {
   createShortLink: CreateShortLinkController;
@@ -17,21 +24,82 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
   app,
   controllers
 ) => {
-  app.post("/short-links", {}, controllers.createShortLink.handle);
+  app.post(
+    "/short-links",
+    {
+      schema: {
+        tags: ["Links"],
+        summary: "Shortten link",
+        body: createShortLinkBodySchema,
+        response: {
+          201: z.describe("The link has been shortened"),
+          400: z.describe("Validation Error"),
+          409: z.describe("Slug already exists"),
+        },
+      },
+    },
+    controllers.createShortLink.handle
+  );
 
   app.delete(
     "/short-links/slug/:slug",
-    {},
+    {
+      schema: {
+        tags: ["Links"],
+        summary: "Delete Short link",
+        params: deleteShortLinkParamsSchema,
+        response: {
+          200: z.describe("Short link has been deleted"),
+        },
+      },
+    },
     controllers.deleteShortLinkBySlug.handle
   );
 
-  app.get("/short-links/slug/:slug", {}, controllers.getShortLinkBySlug.handle);
+  app.get(
+    "/short-links/slug/:slug",
+    {
+      schema: {
+        tags: ["Links"],
+        summary: "Get a Short link",
+        params: getShortLinkParamsSchema,
+        response: {
+          200: z.describe("Short link"),
+          404: z.describe("Short link not found"),
+        },
+      },
+    },
+    controllers.getShortLinkBySlug.handle
+  );
 
   app.patch(
     "/short-links/slug/:slug/increment",
-    {},
+    {
+      schema: {
+        tags: ["Links"],
+        summary: "Increment click count of a short link",
+        params: incrementShortLinkClickParamsSchema,
+        response: {
+          200: z.describe("Short link"),
+          404: z.describe("Short link not found"),
+        },
+      },
+    },
     controllers.incrementShortLinkBySlug.handle
   );
 
-  app.get("/short-links", {}, controllers.listShortLinks.handle);
+  app.get(
+    "/short-links",
+    {
+      schema: {
+        tags: ["Links"],
+        summary: "Get all short links",
+        params: incrementShortLinkClickParamsSchema,
+        response: {
+          200: z.describe("List of Short links"),
+        },
+      },
+    },
+    controllers.listShortLinks.handle
+  );
 };
