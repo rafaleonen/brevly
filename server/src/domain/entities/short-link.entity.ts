@@ -30,7 +30,7 @@ export class ShortLink extends Entity<ShortLinkProps> {
         originalUrl: props.originalUrl,
         clicks: props.clicks ?? 0,
         createdAt: props.createdAt ?? new Date(),
-        deletedAt: props.deletedAt ?? new Date(),
+        deletedAt: props.deletedAt ?? null,
       },
       id
     );

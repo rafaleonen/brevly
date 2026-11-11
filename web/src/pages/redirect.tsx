@@ -2,11 +2,10 @@ import { useIncrementShortLinkClickMutation } from "@/features/mutations/increme
 import logoIcon from "@/shared/assets/svg/logo_icon.svg";
 import { Typography } from "@/shared/ui/typography";
 import { useEffect, useRef } from "react";
-import { Navigate, useSearchParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 export function RedirectPage() {
-  const [searchParams] = useSearchParams();
-  const slug = searchParams.get("slug");
+  const { slug } = useParams<{ slug: string }>();
 
   const hasStarted = useRef(false);
   const {
@@ -41,7 +40,7 @@ export function RedirectPage() {
           </Typography>
           <Typography variant="md">
             Não foi redirecionado?{" "}
-            <a href={data.originalUrl} className="text-blue-base underline">
+            <a href={data?.originalUrl} className="text-blue-base underline">
               Acesse aqui
             </a>
           </Typography>

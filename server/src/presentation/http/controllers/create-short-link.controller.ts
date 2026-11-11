@@ -17,10 +17,10 @@ export class CreateShortLinkController {
       return presentZodValidationError(body.error, reply);
     }
 
-    const { url, slug } = body.data;
+    const { originalUrl, slug } = body.data;
 
     const result = await this.createShortLink.execute({
-      url,
+      url: originalUrl,
       slug,
     });
 
@@ -29,5 +29,5 @@ export class CreateShortLinkController {
     }
 
     return reply.status(201).send(result.right);
-  }
+  };
 }

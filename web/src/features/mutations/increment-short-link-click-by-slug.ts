@@ -10,6 +10,7 @@ async function incrementShortLinkClickBySlug(
 ): Promise<ShortLink> {
   const response = await apiClient.patch(
     `/short-links/slug/${slug}/increment`,
+    undefined,
     {
       signal,
     }

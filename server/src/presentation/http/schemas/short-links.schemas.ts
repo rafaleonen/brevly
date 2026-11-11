@@ -2,7 +2,7 @@ import z from "zod";
 
 export const createShortLinkBodySchema = z.object({
   slug: z.string().max(48),
-  url: z.url(),
+  originalUrl: z.url(),
 });
 
 export const deleteShortLinkParamsSchema = z.object({

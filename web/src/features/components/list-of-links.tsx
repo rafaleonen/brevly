@@ -20,10 +20,7 @@ export function ListOfLinks({ links, onCopy, onDelete }: ListOfLinksProps) {
           <div className="grid grid-cols-12 py-1">
             <div className="flex flex-col col-span-7 gap-2">
               <Link
-                to={{
-                  pathname: "/redirect",
-                  search: `?slug=${encodeURIComponent(link.slug)}`,
-                }}
+                to={`/${encodeURIComponent(link.slug)}`}
                 target="_blank"
               >
                 <Typography variant="md" className="text-blue-base">

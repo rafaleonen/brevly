@@ -11,6 +11,7 @@ export function buildApp(container: Container) {
 
   app.register(fastifyCors, {
     origin: "*",
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   });
 
   buildCompilers(app);

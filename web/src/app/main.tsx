@@ -14,7 +14,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "/", element: <LinksPage /> },
-      { path: "/redirect", element: <RedirectPage /> },
+      { path: "/not-found", element: <NotFoundPage /> },
+      { path: "/:slug", element: <RedirectPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

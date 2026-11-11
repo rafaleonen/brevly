@@ -61,14 +61,14 @@ export class DrizzleShortLinkRepository implements ShortLinkRepository {
     switch (sort) {
       case "id_desc":
       default:
-        orderBy = [asc(shortLinks.id)];
+        orderBy = [desc(shortLinks.id)];
         cursorCondition = decodedCursor
           ? lt(shortLinks.id, decodedCursor.id)
           : undefined;
         break;
 
       case "id_asc":
-        orderBy = [desc(shortLinks.id)];
+        orderBy = [asc(shortLinks.id)];
         cursorCondition = decodedCursor
           ? gt(shortLinks.id, decodedCursor.id)
           : undefined;

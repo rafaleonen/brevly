@@ -50,7 +50,7 @@ export function MyLinksContainer({
   async function handleCopy(slug: string) {
     const origin = window.location.origin;
 
-    await navigator.clipboard.writeText(`${origin}/redirect?slug=${slug}`);
+    await navigator.clipboard.writeText(`${origin}/${slug}`);
   }
 
   return (
