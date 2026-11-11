@@ -1,4 +1,5 @@
 import type { CreateShortLinkUseCase } from "@/application/use-cases/create-short-link.use-case";
+import { isLeft } from "@/core/either";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import {
   presentDomainError,
@@ -9,7 +10,7 @@ import { createShortLinkBodySchema } from "../schemas/short-links.schemas";
 export class CreateShortLinkController {
   constructor(private readonly createShortLink: CreateShortLinkUseCase) {}
 
-  async handle(request: FastifyRequest, reply: FastifyReply) {
+  handle = async (request: FastifyRequest, reply: FastifyReply) => {
     const body = createShortLinkBodySchema.safeParse(request.body);
 
     if (!body.success) {
@@ -23,7 +24,7 @@ export class CreateShortLinkController {
       slug,
     });
 
-    if (result.left) {
+    if (isLeft(result)) {
       return presentDomainError(result.left, reply);
     }
 

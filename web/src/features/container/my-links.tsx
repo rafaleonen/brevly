@@ -20,7 +20,9 @@ export function MyLinksContainer({
   const [sort, setSort] = useState<ShortLinkSortValue>("id_desc");
 
   const { shortLinks, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteListShortLinks(sort);
+    useInfiniteListShortLinks({ sort, limit: 10 });
+
+  console.log("shortLinks", shortLinks);
 
   const { mutateAsync: deleteShortLink } = useDeleteShortLinkMutation();
 

@@ -1,4 +1,10 @@
-import { makeLeft, makeRight, type Either } from "@/core/either";
+import {
+  isLeft,
+  makeLeft,
+  makeRight,
+  unwrapEither,
+  type Either,
+} from "@/core/either";
 import { ShortLink } from "@/domain/entities/short-link.entity";
 import {
   InvalidSlugError,
@@ -30,18 +36,19 @@ export class CreateShortLinkUseCase {
   ): Promise<Either<CreateShortLinkUseErrors, CreateShortLinkOutputDTO>> {
     const shortLinkUrl = ShortLinkUrl.create(input.url);
 
-    if (shortLinkUrl.left) {
+    if (isLeft(shortLinkUrl)) {
       return makeLeft(shortLinkUrl.left);
     }
 
-    const url = shortLinkUrl.right;
+    const url = unwrapEither(shortLinkUrl);
 
     const shortLinkSlug = ShortLinkSlug.create(input.slug);
-    if (shortLinkSlug.left) {
+
+    if (isLeft(shortLinkSlug)) {
       return makeLeft(shortLinkSlug.left);
     }
 
-    const slug = shortLinkSlug.right;
+    const slug = unwrapEither(shortLinkSlug);
 
     const shortLink = ShortLink.create(
       {

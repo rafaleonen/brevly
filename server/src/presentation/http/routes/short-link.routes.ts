@@ -10,6 +10,7 @@ import {
   deleteShortLinkParamsSchema,
   getShortLinkParamsSchema,
   incrementShortLinkClickParamsSchema,
+  shortLinkResponseSchema,
 } from "../schemas/short-links.schemas";
 
 type Options = {
@@ -32,9 +33,19 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
         summary: "Shortten link",
         body: createShortLinkBodySchema,
         response: {
-          201: z.describe("The link has been shortened"),
-          400: z.describe("Validation Error"),
-          409: z.describe("Slug already exists"),
+          201: z.any().describe("The link has been shortened"),
+          400: z
+            .object({
+              code: z.string(),
+              message: z.string(),
+            })
+            .describe("Validation Error"),
+          409: z
+            .object({
+              code: z.string(),
+              message: z.string(),
+            })
+            .describe("Slug already exists"),
         },
       },
     },
@@ -49,7 +60,7 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
         summary: "Delete Short link",
         params: deleteShortLinkParamsSchema,
         response: {
-          200: z.describe("Short link has been deleted"),
+          204: z.any().describe("Short link has been deleted"),
         },
       },
     },
@@ -64,8 +75,13 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
         summary: "Get a Short link",
         params: getShortLinkParamsSchema,
         response: {
-          200: z.describe("Short link"),
-          404: z.describe("Short link not found"),
+          200: shortLinkResponseSchema.describe("Short link"),
+          404: z
+            .object({
+              code: z.string(),
+              message: z.string(),
+            })
+            .describe("Short link not found"),
         },
       },
     },
@@ -80,8 +96,13 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
         summary: "Increment click count of a short link",
         params: incrementShortLinkClickParamsSchema,
         response: {
-          200: z.describe("Short link"),
-          404: z.describe("Short link not found"),
+          200: shortLinkResponseSchema.describe("Short link"),
+          404: z
+            .object({
+              code: z.string(),
+              message: z.string(),
+            })
+            .describe("Short link not found"),
         },
       },
     },
@@ -94,9 +115,13 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
       schema: {
         tags: ["Links"],
         summary: "Get all short links",
-        params: incrementShortLinkClickParamsSchema,
         response: {
-          200: z.describe("List of Short links"),
+          200: z
+            .object({
+              items: z.array(shortLinkResponseSchema),
+              nextCursor: z.string().nullish(),
+            })
+            .describe("List of Short links"),
         },
       },
     },

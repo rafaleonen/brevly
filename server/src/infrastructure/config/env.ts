@@ -7,8 +7,8 @@ const envSchema = z.object({
   CLOUDFLARE_ACCOUNT_ID: z.string(),
   CLOUDFLARE_ACCESS_KEY_ID: z.string(),
   CLOUDFLARE_SECRET_ACCESS_KEY: z.string(),
-  CLOUDFLARE_R2_BUCKET: z.string(),
-  CLOUDFLARE_R2_PUBLIC_URL: z.url(),
+  CLOUDFLARE_BUCKET: z.string(),
+  CLOUDFLARE_PUBLIC_URL: z.url(),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -1,9 +1,11 @@
 import type { IncrementShortLinkClickBySlugUseCase } from "@/application/use-cases/increment-short-link-click-by-slug.use-case";
+import { isLeft, unwrapEither } from "@/core/either";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import {
   presentDomainError,
   presentZodValidationError,
 } from "../presenters/error.presenter";
+import { ShortLinkPresenter } from "../presenters/short-link.presenter";
 import { incrementShortLinkClickParamsSchema } from "../schemas/short-links.schemas";
 
 export class IncrementShortLinkClickBySlugController {
@@ -11,7 +13,7 @@ export class IncrementShortLinkClickBySlugController {
     private readonly incrementShortLinkClickBySlug: IncrementShortLinkClickBySlugUseCase
   ) {}
 
-  async handle(request: FastifyRequest, reply: FastifyReply) {
+  handle = async (request: FastifyRequest, reply: FastifyReply) => {
     const params = incrementShortLinkClickParamsSchema.safeParse(
       request.params
     );
@@ -26,10 +28,12 @@ export class IncrementShortLinkClickBySlugController {
       slug,
     });
 
-    if (result.left) {
+    if (isLeft(result)) {
       return presentDomainError(result.left, reply);
     }
 
-    return reply.status(201).send(result.right);
-  }
+    const shortLink = unwrapEither(result);
+
+    return reply.status(200).send(ShortLinkPresenter.toHttp(shortLink));
+  };
 }

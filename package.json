@@ -6,7 +6,11 @@
     "dev": "pnpm --parallel -r dev",
     "build": "pnpm -r build",
     "dev:server": "pnpm --filter server dev",
-    "dev:web": "pnpm --filter web dev"
+    "dev:web": "pnpm --filter web dev",
+    "db:generate": "pnpm --filter server db:generate",
+    "db:migrate": "pnpm --filter server db:migrate",
+    "db:studio": "pnpm --filter server db:studio",
+    "db:seed": "pnpm --filter server db:seed"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

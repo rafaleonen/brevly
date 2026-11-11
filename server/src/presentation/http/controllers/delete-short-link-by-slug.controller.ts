@@ -1,4 +1,5 @@
 import type { DeleteShortLinkBySlugUseCase } from "@/application/use-cases/delete-short-link-by-slug.use-case";
+import { isLeft } from "@/core/either";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import {
   presentDomainError,
@@ -11,7 +12,7 @@ export class DeleteShortLinkBySlugController {
     private readonly deleteShortLinkBySlug: DeleteShortLinkBySlugUseCase
   ) {}
 
-  async handle(request: FastifyRequest, reply: FastifyReply) {
+  handle = async (request: FastifyRequest, reply: FastifyReply) => {
     const params = deleteShortLinkParamsSchema.safeParse(request.params);
 
     if (!params.success) {
@@ -24,10 +25,10 @@ export class DeleteShortLinkBySlugController {
       slug,
     });
 
-    if (result.left) {
+    if (isLeft(result)) {
       return presentDomainError(result.left, reply);
     }
 
-    return reply.status(201).send(result.right);
-  }
+    return reply.status(204).send(result.right);
+  };
 }

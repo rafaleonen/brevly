@@ -2,12 +2,13 @@
   "name": "server",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/main/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "dev": "tsx watch --env-file=.env src/main/server.ts",
+    "build": "tsup-node",
+    "start": "node dist/main/server.js",
+    "db:generate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs generate",
+    "db:migrate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs migrate",
+    "db:studio": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs studio",
+    "db:seed": "tsx --env-file=.env src/infrastructure/db/seeds/index.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.3.1",
@@ -22,6 +23,9 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
-    "drizzle-kit": "^0.31.11"
+    "drizzle-kit": "^0.31.11",
+    "tsup": "^9.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

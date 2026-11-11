@@ -1,0 +1,22 @@
+services:
+  db:
+    image: bitnami/postgresql
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: brevly
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./server/docker:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      start_period: 30s
+      start_interval: 5s
+      interval: 60s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
