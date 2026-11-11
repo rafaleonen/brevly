@@ -2,7 +2,7 @@ import { useIncrementShortLinkClickMutation } from "@/features/mutations/increme
 import logoIcon from "@/shared/assets/svg/logo_icon.svg";
 import { Typography } from "@/shared/ui/typography";
 import { useEffect, useRef } from "react";
-import { Navigate, useParams } from "react-router";
+import { useParams } from "react-router";
 
 export function RedirectPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -24,7 +24,8 @@ export function RedirectPage() {
   }, [slug, incrementShortLinkClick]);
 
   if (!slug || isError) {
-    return <Navigate to="/not-found" replace />;
+    <p>erro</p>;
+    // return <Navigate to="/not-found" replace />;
   }
 
   return (

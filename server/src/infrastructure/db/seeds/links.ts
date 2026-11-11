@@ -4,31 +4,31 @@ import type { NewShortLinkRow } from "../schema/types";
 export const commonLinks: NewShortLinkRow[] = [
   {
     id: randomUUIDv7(),
-    slug: "Github",
+    slug: "github",
     originalUrl: "https://github.com",
     clicks: 12,
   },
   {
     id: randomUUIDv7(),
-    slug: "Google",
+    slug: "google",
     originalUrl: "https://google.com",
     clicks: 14,
   },
   {
     id: randomUUIDv7(),
-    slug: "Facebook",
+    slug: "facebook",
     originalUrl: "https://www.facebook.com/",
     clicks: 5,
   },
   {
     id: randomUUIDv7(),
-    slug: "Instagram",
+    slug: "instagram",
     originalUrl: "https://www.instagram.com/",
     clicks: 11,
   },
   {
     id: randomUUIDv7(),
-    slug: "Twitter-X",
+    slug: "twitter-x",
     originalUrl: "https://x.com/",
     clicks: 9,
   },
@@ -44,25 +44,25 @@ export const commonLinks: NewShortLinkRow[] = [
 export const iaLinks: NewShortLinkRow[] = [
   {
     id: randomUUIDv7(),
-    slug: "Claude-IA",
+    slug: "claude-ia",
     originalUrl: "https://claude.ai",
     clicks: 7,
   },
   {
     id: randomUUIDv7(),
-    slug: "Chat-GPT-IA",
+    slug: "chat-gpt-ia",
     originalUrl: "https://chatgpt.com/",
     clicks: 5,
   },
   {
     id: randomUUIDv7(),
-    slug: "Grok-IA",
+    slug: "grok-ia",
     originalUrl: "https://grok.com/",
     clicks: 4,
   },
   {
     id: randomUUIDv7(),
-    slug: "Gemini-IA",
+    slug: "gemini-ia",
     originalUrl: "https://gemini.google.com/",
     clicks: 4,
   },
@@ -71,31 +71,31 @@ export const iaLinks: NewShortLinkRow[] = [
 export const docLinks: NewShortLinkRow[] = [
   {
     id: randomUUIDv7(),
-    slug: "Drizzle-Docs",
+    slug: "drizzle-docs",
     originalUrl: "https://orm.drizzle.team",
     clicks: 1,
   },
   {
     id: randomUUIDv7(),
-    slug: "Tailwind-Docs",
+    slug: "tailwind-docs",
     originalUrl: "https://tailwindcss.com/docs/",
     clicks: 5,
   },
   {
     id: randomUUIDv7(),
-    slug: "React-Hook-Form-Docs",
+    slug: "react-Hook-Form-docs",
     originalUrl: "https://react-hook-form.com/docs",
     clicks: 2,
   },
   {
     id: randomUUIDv7(),
-    slug: "Fastify-Docs",
+    slug: "fastify-docs",
     originalUrl: "https://fastify.dev/docs/",
     clicks: 3,
   },
   {
     id: randomUUIDv7(),
-    slug: "Vite-Docs",
+    slug: "vite-docs",
     originalUrl: "https://vite.dev/guide/",
     clicks: 3,
   },
@@ -104,31 +104,31 @@ export const docLinks: NewShortLinkRow[] = [
 export const myLinks: NewShortLinkRow[] = [
   {
     id: randomUUIDv7(),
-    slug: "Portfolio-Dev",
+    slug: "portfolio-dev",
     originalUrl: "https://rafael-portfolio.vercel.app/",
     clicks: 38,
   },
   {
     id: randomUUIDv7(),
-    slug: "Linkedin-Profile",
+    slug: "linkedin-profile",
     originalUrl: "https://www.linkedin.com/in/rafael-leonen/",
     clicks: 15,
   },
   {
     id: randomUUIDv7(),
-    slug: "Github-Profile",
+    slug: "github-profile",
     originalUrl: "https://github.com/rafaleonen",
     clicks: 28,
   },
   {
     id: randomUUIDv7(),
-    slug: "Project-Repository",
+    slug: "project-repository",
     originalUrl: "https://github.com/rafaleonen/brevly",
     clicks: 15,
   },
   {
     id: randomUUIDv7(),
-    slug: "Project-Figma",
+    slug: "project-figma",
     originalUrl:
       "https://www.figma.com/design/JZgDz2EE7aM28Bc2CNJuqV/Encurtador-de-Links--Community-?node-id=3118-709&t=WZXX0oc7MmBvYRyb-1",
     clicks: 21,

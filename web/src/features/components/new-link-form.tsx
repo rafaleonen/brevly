@@ -26,10 +26,7 @@ const newLinkSchema = z.object({
     .string()
     .trim()
     .min(1, "Link Encurtado é obrigatório!")
-    .regex(
-      /^[a-zA-Z0-9_-]+$/,
-      "Use apenas letras, números, hífen e underline."
-    ),
+    .regex(/^[a-z0-9_-]+$/, "Use apenas letras, números, hífen e underline."),
 });
 
 export function NewLinkForm({ onSubmit }: NewLinkFormProps) {
@@ -81,8 +78,9 @@ export function NewLinkForm({ onSubmit }: NewLinkFormProps) {
         {...shortenedUrlField}
         onChange={(event) => {
           event.target.value = event.target.value
+            .toLowerCase()
             .replace(/\s+/g, "-")
-            .replace(/[^a-zA-Z0-9_-]/g, "");
+            .replace(/[^a-z0-9_-]/g, "");
           shortenedUrlField.onChange(event);
         }}
       />

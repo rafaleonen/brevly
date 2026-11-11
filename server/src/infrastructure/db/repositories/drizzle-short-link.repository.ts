@@ -1,3 +1,4 @@
+import { ShortLinkSlug } from "@/domain/value-objects/short-link-slug.vo";
 import type { ShortLink } from "@/domain/entities/short-link.entity";
 import {
   InvalidCursor,
@@ -125,7 +126,7 @@ export class DrizzleShortLinkRepository implements ShortLinkRepository {
     const [row] = await this.db
       .select()
       .from(shortLinks)
-      .where(eq(shortLinks.id, id))
+      .where(and(isNull(shortLinks.deletedAt), eq(shortLinks.id, id)))
       .limit(1);
 
     return row ? ShortLinkMapper.toDomain(row) : null;
@@ -135,7 +136,7 @@ export class DrizzleShortLinkRepository implements ShortLinkRepository {
     const [row] = await this.db
       .select()
       .from(shortLinks)
-      .where(eq(shortLinks.slug, slug))
+      .where(and(isNull(shortLinks.deletedAt), eq(shortLinks.slug, ShortLinkSlug.normalize(slug))))
       .limit(1);
 
     return row ? ShortLinkMapper.toDomain(row) : null;

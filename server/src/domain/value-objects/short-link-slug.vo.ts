@@ -7,7 +7,7 @@ interface ShortLinkSlugProps {
 
 const MAX_LENGTH = 48;
 
-const SLUG_PATTERN = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/;
+const SLUG_PATTERN = /^[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?$/;
 
 export class ShortLinkSlug {
   private constructor(private readonly props: ShortLinkSlugProps) {
@@ -15,17 +15,21 @@ export class ShortLinkSlug {
   }
 
   static create(slug: string): Either<InvalidSlugError, ShortLinkSlug> {
-    const trimmed = slug?.trim() ?? "";
+    const normalized = ShortLinkSlug.normalize(slug);
 
-    if (trimmed.length > MAX_LENGTH) {
+    if (normalized.length > MAX_LENGTH) {
       return makeLeft(new InvalidSlugError(slug));
     }
 
-    if (!SLUG_PATTERN.test(trimmed)) {
+    if (!SLUG_PATTERN.test(normalized)) {
       return makeLeft(new InvalidSlugError(slug));
     }
 
-    return makeRight(new ShortLinkSlug({ value: trimmed }));
+    return makeRight(new ShortLinkSlug({ value: normalized }));
+  }
+
+  static normalize(slug: string): string {
+    return slug?.trim().toLowerCase() ?? "";
   }
 
   static restore(value: string): ShortLinkSlug {
