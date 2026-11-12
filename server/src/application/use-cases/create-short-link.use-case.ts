@@ -67,8 +67,9 @@ export class CreateShortLinkUseCase {
         protocol: shortLink.originalUrl.protocol,
       });
     } catch (err) {
-      if (err instanceof SlugAlreadyExistsError)
-        makeLeft(new SlugAlreadyExistsError(shortLink.slug.value));
+      if (err instanceof SlugAlreadyExistsError) {
+        return makeLeft(err);
+      }
       throw err;
     }
   }
