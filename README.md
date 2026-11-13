@@ -85,7 +85,7 @@ Veja o [README do Web](./web/README.md).
 
 ### Server (Back-end)
 
-Veja o [README do Web](./server/README.md).
+Veja o [README do Server](./server/README.md).
 
 ---
 
