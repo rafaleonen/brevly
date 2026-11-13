@@ -10,5 +10,6 @@ export function buildRoutes(app: FastifyInstance, container: Container) {
     incrementShortLinkBySlug:
       container.controllers.incrementShortLinkClickBySlug,
     listShortLinks: container.controllers.listShortLinks,
+    exportShortLinks: container.controllers.exportShortLinks,
   });
 }

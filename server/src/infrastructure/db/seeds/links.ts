@@ -83,7 +83,7 @@ export const docLinks: NewShortLinkRow[] = [
   },
   {
     id: randomUUIDv7(),
-    slug: "react-Hook-Form-docs",
+    slug: "react-hook-form-docs",
     originalUrl: "https://react-hook-form.com/docs",
     clicks: 2,
   },

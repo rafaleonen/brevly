@@ -28,3 +28,8 @@ export interface ListShortLinksInputDTO {
   cursor?: string | null | undefined;
   sort?: ShortLinkSort;
 }
+
+export interface ExportShortLinksOutputDTO {
+  key: string;
+  url: string;
+}

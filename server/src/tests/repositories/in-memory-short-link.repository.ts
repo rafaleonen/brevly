@@ -5,6 +5,7 @@ import {
 } from "@/domain/errors/short-link.error";
 import type {
   PaginatedResult,
+  ShortLinkExportData,
   ShortLinkFindProps,
   ShortLinkRepository,
   ShortLinkSort,
@@ -116,6 +117,19 @@ export class InMemoryShortLinkRepository implements ShortLinkRepository {
     const item = this.active().find((item) => item.slug.value === normalized);
 
     return item ? this.clone(item) : null;
+  }
+
+  async *streamForExport(): AsyncIterable<ShortLinkExportData> {
+    for (const item of this.items) {
+      yield {
+        id: item.id,
+        clicks: item.clicks,
+        originalUrl: item.originalUrl.value,
+        slug: item.slug.value,
+        createdAt: item.createdAt,
+        deletedAt: item.deletedAt,
+      };
+    }
   }
 
   private active(): ShortLink[] {

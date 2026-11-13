@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import z from "zod";
 import { CreateShortLinkController } from "../controllers/create-short-link.controller";
 import type { DeleteShortLinkBySlugController } from "../controllers/delete-short-link-by-slug.controller";
+import type { ExportShortLinksController } from "../controllers/export-short-links.controller";
 import type { GetShortLinkBySlugController } from "../controllers/get-short-link-by-slug.controller";
 import type { IncrementShortLinkClickBySlugController } from "../controllers/increment-short-link-by-slug.controller";
 import type { ListShortLinksController } from "../controllers/list-short-links.controller";
@@ -19,6 +20,7 @@ type Options = {
   getShortLinkBySlug: GetShortLinkBySlugController;
   incrementShortLinkBySlug: IncrementShortLinkClickBySlugController;
   listShortLinks: ListShortLinksController;
+  exportShortLinks: ExportShortLinksController;
 };
 
 export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
@@ -126,5 +128,24 @@ export const shortLinkRoutes: FastifyPluginAsyncZod<Options> = async (
       },
     },
     controllers.listShortLinks.handle
+  );
+
+  app.post(
+    "/short-links/export",
+    {
+      schema: {
+        tags: ["Links"],
+        summary: "Export all short links to a CSV file",
+        response: {
+          200: z
+            .object({
+              key: z.string(),
+              url: z.url(),
+            })
+            .describe("The CSV file has been uploaded"),
+        },
+      },
+    },
+    controllers.exportShortLinks.handle
   );
 };

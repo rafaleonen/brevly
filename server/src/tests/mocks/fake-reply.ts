@@ -33,8 +33,11 @@ export function makeFakeReply() {
   };
 }
 
+// Includes a stub logger so controllers can call request.log.* safely.
 export function makeFakeRequest(
   parts: Partial<Pick<FastifyRequest, "body" | "params" | "query">>
 ): FastifyRequest {
-  return parts as FastifyRequest;
+  const log = { error: vi.fn(), warn: vi.fn(), info: vi.fn(), debug: vi.fn() };
+
+  return { log, ...parts } as unknown as FastifyRequest;
 }

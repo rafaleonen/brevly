@@ -5,6 +5,7 @@ import {
 } from "@/domain/errors/short-link.error";
 import type {
   PaginatedResult,
+  ShortLinkExportData,
   ShortLinkSort,
 } from "@/domain/repositories/short-link.repository";
 import { db } from "@/infrastructure/db/client";
@@ -322,6 +323,89 @@ describe("DrizzleShortLinkRepository (integration)", () => {
       await expect(sut.find({ limit: 10, cursor })).rejects.toBeInstanceOf(
         InvalidCursor
       );
+    });
+  });
+
+  describe("streamForExport", () => {
+    async function collect(): Promise<ShortLinkExportData[]> {
+      const rows: ShortLinkExportData[] = [];
+      for await (const row of sut.streamForExport()) {
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    const byId = (a: ShortLinkExportData, b: ShortLinkExportData) =>
+      a.id.localeCompare(b.id);
+
+    it("should yield nothing when there are no links", async () => {
+      expect(await collect()).toEqual([]);
+    });
+
+    it("should yield every field mapped to camelCase", async () => {
+      const createdAt = new Date("2025-06-01T10:20:30.400Z");
+      await sut.create(
+        makeShortLink({
+          id: uuid(1),
+          slug: "my-link",
+          originalUrl: "https://example.com/path?q=1",
+          clicks: 7,
+          createdAt,
+        })
+      );
+
+      expect(await collect()).toEqual([
+        {
+          id: uuid(1),
+          slug: "my-link",
+          originalUrl: "https://example.com/path?q=1",
+          clicks: 7,
+          createdAt,
+          deletedAt: null,
+        },
+      ]);
+    });
+
+    it("should include deleted links with their deletedAt", async () => {
+      const deletedAt = new Date("2025-07-01T08:00:00.000Z");
+      await sut.create(makeShortLink({ id: uuid(1), slug: "kept" }));
+      await sut.create(
+        makeShortLink({ id: uuid(2), slug: "removed", deletedAt })
+      );
+
+      const rows = (await collect()).sort(byId);
+
+      expect(rows.map((row) => row.slug)).toEqual(["kept", "removed"]);
+      expect(rows[0]?.deletedAt).toBeNull();
+      expect(rows[1]?.deletedAt).toEqual(deletedAt);
+    });
+
+    it("should yield every row across multiple cursor batches", async () => {
+      // The cursor reads 50 rows at a time, so 120 rows need 3 batches.
+      const total = 120;
+      for (let i = 1; i <= total; i++) {
+        await sut.create(makeShortLink({ id: uuid(i), slug: `link-${i}` }));
+      }
+
+      const rows = await collect();
+
+      expect(rows).toHaveLength(total);
+      expect(new Set(rows.map((row) => row.id)).size).toBe(total);
+    });
+
+    it("should allow stopping early without leaking the cursor", async () => {
+      for (let i = 1; i <= 60; i++) {
+        await sut.create(makeShortLink({ id: uuid(i), slug: `link-${i}` }));
+      }
+
+      let read = 0;
+      for await (const _ of sut.streamForExport()) {
+        if (++read === 3) break;
+      }
+
+      expect(read).toBe(3);
+      // The connection is usable again after the early return.
+      expect(await sut.findById(uuid(1))).not.toBeNull();
     });
   });
 });

@@ -1,4 +1,3 @@
-import { ShortLinkSlug } from "@/domain/value-objects/short-link-slug.vo";
 import type { ShortLink } from "@/domain/entities/short-link.entity";
 import {
   InvalidCursor,
@@ -6,11 +5,13 @@ import {
 } from "@/domain/errors/short-link.error";
 import type {
   PaginatedResult,
+  ShortLinkExportData,
   ShortLinkFindProps,
   ShortLinkRepository,
 } from "@/domain/repositories/short-link.repository";
+import { ShortLinkSlug } from "@/domain/value-objects/short-link-slug.vo";
 import { and, asc, desc, eq, gt, isNull, lt, or, SQL } from "drizzle-orm";
-import type { Database } from "../client";
+import { pg, type Database } from "../client";
 import { decodeCursor, encodeCursor, type Cursor } from "../helpers/cursor";
 import { uniqueViolation } from "../helpers/unique-violation";
 import { ShortLinkMapper } from "../mappers/short-link.mapper";
@@ -136,9 +137,51 @@ export class DrizzleShortLinkRepository implements ShortLinkRepository {
     const [row] = await this.db
       .select()
       .from(shortLinks)
-      .where(and(isNull(shortLinks.deletedAt), eq(shortLinks.slug, ShortLinkSlug.normalize(slug))))
+      .where(
+        and(
+          isNull(shortLinks.deletedAt),
+          eq(shortLinks.slug, ShortLinkSlug.normalize(slug))
+        )
+      )
       .limit(1);
 
     return row ? ShortLinkMapper.toDomain(row) : null;
   }
+
+  async *streamForExport(): AsyncIterable<ShortLinkExportData> {
+    const { sql, params } = this.db
+      .select({
+        id: shortLinks.id,
+        slug: shortLinks.slug,
+        clicks: shortLinks.clicks,
+        originalUrl: shortLinks.originalUrl,
+        createdAt: shortLinks.createdAt,
+        deletedAt: shortLinks.deletedAt,
+      })
+      .from(shortLinks)
+      .toSQL();
+
+    const cursor = pg.unsafe(sql, params as string[]).cursor(50);
+
+    for await (const rows of cursor) {
+      for (const row of rows) {
+        yield {
+          id: row.id,
+          originalUrl: row.original_url,
+          clicks: row.clicks,
+          slug: row.slug,
+          createdAt: toDate(row.created_at),
+          deletedAt: row.deleted_at ? toDate(row.deleted_at) : null,
+        };
+      }
+    }
+  }
+}
+
+// Drizzle disables postgres.js date parsing on the shared client, so raw
+// queries through `pg` return timestamps as text such as
+// "2025-06-01 10:20:30.4". Columns are "timestamp" (no time zone) holding
+// UTC values, so the text is read as UTC.
+function toDate(value: string): Date {
+  return new Date(`${value.replace(" ", "T")}Z`);
 }
