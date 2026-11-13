@@ -40,7 +40,13 @@ brevly
 
 ---
 
-## Conceitos abordados -> Solid
+## Cursor based pagination
+
+Para a listagem de links encurtador foi utilizado a páginação baseado em cursor usando UUIDv7. Também foi implementado o campo `sort`, alterando a forma em que o cursor realiza a páginação por meio do `nextCursor`
+
+---
+
+## SOLID
 
 ### S — Single Responsibility Principle (Responsabilidade Única)
 
