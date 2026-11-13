@@ -2,6 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Divider } from "@/shared/ui/divider";
 import { Select } from "@/shared/ui/select";
 import { Typography } from "@/shared/ui/typography";
+import { downloadFile } from "@/shared/utils/download-file";
 import { Download } from "lucide-react";
 import { useEffect, useRef, useState, type ComponentProps } from "react";
 import { twMerge } from "tailwind-variants";
@@ -9,6 +10,7 @@ import { EmptyList } from "../components/empty-list";
 import { ListOfLinks } from "../components/list-of-links";
 import { SHORT_LINK_SORT, type ShortLinkSortValue } from "../constants/sort";
 import { useDeleteShortLinkMutation } from "../mutations/delete-short-link-by-slug";
+import { useExportShortLinksMutation } from "../mutations/export-short-links";
 import { useInfiniteListShortLinks } from "../queries/list-short-links";
 
 type MyLinksContainerProps = ComponentProps<"div">;
@@ -25,6 +27,7 @@ export function MyLinksContainer({
   console.log("shortLinks", shortLinks);
 
   const { mutateAsync: deleteShortLink } = useDeleteShortLinkMutation();
+  const { mutateAsync: exportShortLinks } = useExportShortLinksMutation();
 
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +56,11 @@ export function MyLinksContainer({
     await navigator.clipboard.writeText(`${origin}/${slug}`);
   }
 
+  async function handleExport() {
+    const { url } = await exportShortLinks();
+    await downloadFile(url);
+  }
+
   return (
     <div
       className={twMerge(
@@ -70,7 +78,7 @@ export function MyLinksContainer({
             onChange={(e) => setSort(e.target.value)}
           />
 
-          <Button variant="secondary" disabled>
+          <Button variant="secondary" onClick={handleExport}>
             <Download size={16} strokeWidth={1.5} />
             <span className="leading-4 text-xs font-semibold font-sans">
               Baixar CSV
