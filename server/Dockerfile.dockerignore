@@ -1,0 +1,13 @@
+*
+
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+
+!server/package.json
+!server/tsconfig.json
+!server/tsup.config.ts
+!server/src
+
+server/src/tests
+server/src/**/*.spec.ts
